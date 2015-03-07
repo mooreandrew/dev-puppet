@@ -64,3 +64,9 @@ puppet resource cron puppet-agent ensure=present user=root minute=5 command='/us
 puppet agent --test
 
 sudo service puppetmaster start
+
+sed -i "s/$external_url    = 'http://localhost',/$external_url    = 'http://localhost',/" /etc/puppet/environments/bugfix_missing_pkgs/site/profiles/manifests/gitlab.pp
+sed -i "s/Redhat     => 'nfs-utils',/Redhat     => 'nfs-utils',\nCentOS     => 'nfs-utils',/" /etc/puppet/environments/bugfix_missing_pkgs/site/profiles/manifests/gitlab.pp
+sed -i "s/deploy_from_jenkins_rsa,/deploy_from_jenkins_rsa = '',/" /etc/puppet/environments/bugfix_missing_pkgs/site/profiles/manifests/jenkins.pp
+
+
