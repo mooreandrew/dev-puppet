@@ -1,8 +1,8 @@
-hostname repos
-echo repos > /etc/hostname
-echo 192.168.0.200 puppetmaster >> /etc/hosts
-echo 192.168.0.201 gitlab >> /etc/hosts
-echo 192.168.0.202 ci >> /etc/hosts
+hostname gitlab-app.home.net
+echo gitlab-app.home.net > /etc/hostname
+echo 192.168.0.200 puppet-master.home.net >> /etc/hosts
+echo 192.168.0.201 gitlab-app.home.net >> /etc/hosts
+echo 192.168.0.202 jenkins-master.home.net >> /etc/hosts
 
 eval `ssh-agent -s`
 
@@ -41,12 +41,12 @@ ssh-add ${KEYFILE}
 service network restart
 sudo rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
 sudo yum -y install puppet
-sed -i 's/ssldir = $vardir\/ssl/ssldir = $vardir\/ssl\nserver = puppetmaster\nlogdir = \/var\/log\/pe-puppet/' /etc/puppet/puppet.conf
+sed -i 's/ssldir = $vardir\/ssl/ssldir = $vardir\/ssl\nserver = puppet-master.home.net\nlogdir = \/var\/log\/pe-puppet/' /etc/puppet/puppet.conf
 
 ( cmdpid=$BASHPID; (sleep 5; kill $cmdpid) & puppet agent --waitforcert 10 --test )
 
 #puppet resource cron puppet-agent ensure=present user=root minute=5 command='/usr/bin/puppet agent --onetime --no-daemonize --splay'
 
-ssh -t vagrant@puppetmaster -o StrictHostKeyChecking=no "sudo puppet cert --sign repos"
+ssh -t vagrant@puppet-master.home.net -o StrictHostKeyChecking=no "sudo puppet cert --sign gitlab-app.home.net"
 puppet agent --waitforcert 10 --test
 sudo service puppet start

@@ -7,6 +7,8 @@ Vagrant.configure("2") do |config|
 	
     v.vm.host_name = "node1"
 	v.vm.provision :shell, :path => 'provision-node1.sh'
+	v.vm.synced_folder "puppet2", "/etc/puppet/"
+
 	v.vm.provider :virtualbox do |vb|
 		vb.customize ['modifyvm', :id, '--memory', ENV['VM_MEMORY'] || 2048]
 		vb.customize ["modifyvm", :id, "--cpus", ENV['VM_CPUS'] || 4]

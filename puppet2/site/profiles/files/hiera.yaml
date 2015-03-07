@@ -1,0 +1,13 @@
+:hierarchy:
+  - secrets/nodes/%{::fqdn}
+  - secrets/environments/%{environment}
+  - secrets/secrets
+  - roles/%{::machine_role}
+  - common
+  - jenkins-master
+
+:backends:
+  - yaml
+
+:yaml:
+  :datadir: /etc/puppet/hiera
