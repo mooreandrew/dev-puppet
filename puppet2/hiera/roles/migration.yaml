@@ -1,5 +1,0 @@
----
-
-classes:
-  - 'profiles::appserver'
-  - 'profiles::geos_addins'

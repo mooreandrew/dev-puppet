@@ -1,1 +1,0 @@
-{"virtualbox":{"/etc/puppet/modules/gitlab":{"guestpath":"/etc/puppet/modules/gitlab","hostpath":"/Users/sowen/Code/geppetto/puppet-gitlab","disabled":false},"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/sowen/Code/geppetto/puppet-gitlab","disabled":false}}}

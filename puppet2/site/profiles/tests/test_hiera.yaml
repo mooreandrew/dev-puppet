@@ -1,9 +1,0 @@
-:hierarchy:
-  - roles/%{::machine_role}
-  - common
-
-:backends:
-  - yaml
-
-:yaml:
-  :datadir: ./hiera
