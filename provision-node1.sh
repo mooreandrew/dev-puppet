@@ -43,7 +43,7 @@ ln -s /etc/r10k.yaml /etc/puppet/r10k.yaml
 ln -s /etc/hiera.yaml /etc/puppet/hiera.yaml
 
 
-sed -i 's/ssldir = $vardir\/ssl/ssldir = $vardir\/ssl\nserver = puppet-master.home.net\nlogdir = \/var\/log\/pe-puppet\nmodulepath = $confdir\/environments\/$environment\/modules:$confdir\/environments\/$environment\/\n[master]\nmanifest = $confdir\/environments\/$environment\/site\/manifests\/site.pp/' /etc/puppet/puppet.conf
+sed -i 's/ssldir = $vardir\/ssl/ssldir = $vardir\/ssl\nserver = puppet-master.home.net\nlogdir = \/var\/log\/pe-puppet\nenvironmentpath = $confdir\/environments\nbasemodulepath = $confdir\/modules:\/opt\/puppet\/share\/puppet\/modules/' /etc/puppet/puppet.conf
 echo "environment = bugfix_missing_pkgs" >> /etc/puppet/puppet.conf
 
 sudo service puppetmaster start
@@ -61,4 +61,6 @@ r10k deploy environment -p
 
 puppet resource cron puppet-agent ensure=present user=root minute=5 command='/usr/bin/puppet agent --onetime --no-daemonize --splay'
 
-puppet agent --test; exit 0
+puppet agent --test
+
+sudo service puppetmaster start

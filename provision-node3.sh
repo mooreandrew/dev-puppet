@@ -44,10 +44,6 @@ sudo yum -y install puppet
 sed -i 's/ssldir = $vardir\/ssl/ssldir = $vardir\/ssl\nserver = puppet-master.home.net\nlogdir = \/var\/log\/pe-puppet/' /etc/puppet/puppet.conf
 echo "environment = bugfix_missing_pkgs" >> /etc/puppet/puppet.conf
 
-( cmdpid=$BASHPID; (sleep 5; kill $cmdpid) & puppet agent --waitforcert 10 --test )
+puppet agent --test
 
-#puppet resource cron puppet-agent ensure=present user=root minute=5 command='/usr/bin/puppet agent --onetime --no-daemonize --splay'
-
-ssh -t vagrant@puppet-master.home.net -o StrictHostKeyChecking=no "sudo puppet cert --sign jenkins-master.home.net"
-puppet agent --waitforcert 10 --test
-sudo service puppet start
+puppet resource cron puppet-agent ensure=present user=root minute=5 command='/usr/bin/puppet agent --onetime --no-daemonize --splay'
