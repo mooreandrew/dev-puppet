@@ -42,7 +42,6 @@ EOF
 ln -s /etc/r10k.yaml /etc/puppet/r10k.yaml
 ln -s /etc/hiera.yaml /etc/puppet/hiera.yaml
 
-
 sed -i 's/ssldir = $vardir\/ssl/ssldir = $vardir\/ssl\nserver = puppet-master.home.net\nlogdir = \/var\/log\/pe-puppet\nenvironmentpath = $confdir\/environments\nbasemodulepath = $confdir\/modules:\/opt\/puppet\/share\/puppet\/modules/' /etc/puppet/puppet.conf
 echo "environment = bugfix_missing_pkgs" >> /etc/puppet/puppet.conf
 
@@ -50,11 +49,6 @@ sudo service puppetmaster start
 
 urlgrabber -o /etc/yum.repos.d/timhughes-r10k-epel-6.repo https://copr.fedoraproject.org/coprs/timhughes/r10k/repo/epel-6/timhughes-r10k-epel-6.repo
 yum -y install rubygem-r10k
- 
-puppet module install rtyler-jenkins
-puppet module install cornfeedhobo-nano
-puppet module install puppetlabs-stdlib
-puppet module install spuder-gitlab
 
 ln -s /usr/local/bin/r10k /usr/bin/r10k
 r10k deploy environment -p
@@ -65,8 +59,10 @@ puppet agent --test
 
 sudo service puppetmaster start
 
-sed -i "s/$external_url    = 'http://localhost',/$external_url    = 'http://localhost',/" /etc/puppet/environments/bugfix_missing_pkgs/site/profiles/manifests/gitlab.pp
+sed -i "s/$external_url    = 'localhost',/$external_url    = 'http:\/\/localhost',/" /etc/puppet/environments/bugfix_missing_pkgs/site/profiles/manifests/gitlab.pp
 sed -i "s/Redhat     => 'nfs-utils',/Redhat     => 'nfs-utils',\nCentOS     => 'nfs-utils',/" /etc/puppet/environments/bugfix_missing_pkgs/site/profiles/manifests/gitlab.pp
-sed -i "s/deploy_from_jenkins_rsa,/deploy_from_jenkins_rsa = '',/" /etc/puppet/environments/bugfix_missing_pkgs/site/profiles/manifests/jenkins.pp
+sed -i "s/){/){\n \$gitlab_download_link = \$::operatingsystem ? {\nCentOS     => 'https:\/\/downloads-packages.s3.amazonaws.com\/centos-7.0.1406\/gitlab-7.5.1_omnibus.5.2.0.ci-1.el7.x86_64.rpm',\nRedhat     => 'https:\/\/downloads-packages.s3.amazonaws.com\/centos-7.0.1406\/gitlab-7.5.1_omnibus.5.2.0.ci-1.el7.x86_64.rpm',\n    Ubuntu     => 'https:\/\/downloads-packages.s3.amazonaws.com\/ubuntu-14.04\/gitlab_7.5.1-omnibus.5.2.0.ci-1_amd64.deb',\n}/" /etc/puppet/environments/bugfix_missing_pkgs/site/profiles/manifests/gitlab.pp
+sed -i "s/'https:\/\/downloads-packages.s3.amazonaws.com\/ubuntu-14.04\/gitlab_7.5.1-omnibus.5.2.0.ci-1_amd64.deb'/\$gitlab_download_link/" /etc/puppet/environments/bugfix_missing_pkgs/site/profiles/manifests/gitlab.pp
 
+sed -i "s/  \$deploy_from_jenkins_rsa,/  \$deploy_from_jenkins_rsa = ''/" /etc/puppet/environments/bugfix_missing_pkgs/site/profiles/manifests/jenkins.pp
 
