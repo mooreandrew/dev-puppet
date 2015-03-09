@@ -8,7 +8,7 @@ service network restart
 sudo rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
 sudo yum -y install puppet
 sed -i 's/ssldir = $vardir\/ssl/ssldir = $vardir\/ssl\nserver = puppet-master.home.net\nlogdir = \/var\/log\/pe-puppet/' /etc/puppet/puppet.conf
-echo "environment = bugfix_missing_pkgs" >> /etc/puppet/puppet.conf
+sed -i 's/\[agent\]/\[agent\]\nenvironment = development/' /etc/puppet/puppet.conf
 
 puppet agent --test
 
