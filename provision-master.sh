@@ -1,4 +1,5 @@
 echo 172.16.42.50 puppet-master.home.net >> /etc/hosts
+echo 172.16.42.50 puppet >> /etc/hosts
 
 wget https://apt.puppetlabs.com/puppetlabs-release-trusty.deb
 sudo dpkg -i puppetlabs-release-trusty.deb
@@ -31,3 +32,8 @@ service puppetmaster restart
 
 
 sed -i 's/production/development/' /etc/puppet/puppet.conf
+
+
+
+echo "Fixing Package Issues"
+sed -i "s/  \$deploy_from_jenkins_rsa,/  \$deploy_from_jenkins_rsa = ''/" /etc/puppet/environments/development/site/profiles/manifests/jenkins.pp

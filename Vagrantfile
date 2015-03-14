@@ -3,6 +3,7 @@ Vagrant.configure("2") do |config|
   nodes = []
   nodes << {"name"  => 'system-of-record.home.net', "ip" =>  "172.16.42.51"}
   nodes << {"name"  => 'jenkins-master.home.net', "ip" =>  "172.16.42.52"}
+  nodes << {"name"  => 'gitlab-app.home.net', "ip" =>  "172.16.42.53"}
 
   #### Loading Puppet Master (Ubuntu)
   config.vm.define "puppet-master.home.net" do |v|

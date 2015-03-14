@@ -1,4 +1,5 @@
 echo 172.16.42.50 puppet-master.home.net >> /etc/hosts
+echo 172.16.42.50 puppet >> /etc/hosts
 
 sed -i -e 's,keepcache=0,keepcache=1,g' /etc/yum.conf
 
