@@ -1,19 +1,19 @@
 Vagrant.configure("2") do |config|
 
   nodes = []
-  nodes << 'gitlab.home.net'
-  nodes << 'jenkins-master.home.net'
-  nodes << 'system-of-record.home.net'
+  nodes << {"name"  => 'system-of-record.home.net', "ip" =>  "172.16.42.51"}
+  nodes << {"name"  => 'jenkins-master.home.net', "ip" =>  "172.16.42.52"}
 
   #### Loading Puppet Master (Ubuntu)
   config.vm.define "puppet-master.home.net" do |v|
-    v.vm.box = "landregistry/ubuntu"
+    v.vm.box = "ubuntu/trusty64"
 	  v.ssh.forward_agent = true
     v.vm.hostname = "puppet-master.home.net"
     v.vm.network "private_network", :ip => "172.16.42.50"
 	  v.vm.provision :shell, :path => 'provision-master.sh'
     v.vm.synced_folder ".vagrant_home", "/home/vagrant"
     v.vm.synced_folder ".aptget", "/var/cache/apt/archives/"
+    v.vm.synced_folder ".environments", "/etc/puppet/environments"
 
 	  v.vm.provider :virtualbox do |vb|
 		  vb.customize ['modifyvm', :id, '--memory', ENV['VM_MEMORY'] || 2048]
@@ -22,13 +22,13 @@ Vagrant.configure("2") do |config|
   end
 
   #### Loading nodes (CentOS)
-  for i in 0..nodes.length - 1
-    config.vm.define nodes[i] do |v|
+  (0..(nodes.length - 1)).each do |i|
+    config.vm.define nodes[i]['name'] do |v|
       v.vm.box = "landregistry/centos-beta"
   	  v.ssh.forward_agent = true
-      v.vm.network "private_network", :ip => "172.16.42." + (51 + i.to_i).to_s
+      v.vm.network "private_network", :ip => nodes[i]['ip']
       v.vm.synced_folder ".yum", "/var/cache/yum"
-
+      v.vm.host_name = nodes[i]['name']
   	  v.vm.provision :shell, :path => 'provision-agent.sh'
 
   	  v.vm.provider :virtualbox do |vb|
