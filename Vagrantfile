@@ -11,7 +11,6 @@ Vagrant.configure("2") do |config|
     v.vm.hostname = "puppet-master.home.net"
     v.vm.network "private_network", :ip => "172.16.42.50"
 	  v.vm.provision :shell, :path => 'provision-master.sh'
-    v.vm.synced_folder ".vagrant_home", "/home/vagrant"
     v.vm.synced_folder ".aptget", "/var/cache/apt/archives/"
     v.vm.synced_folder ".environments", "/etc/puppet/environments"
 

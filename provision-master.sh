@@ -20,12 +20,14 @@ librarian-puppet install
 
 puppet apply --modulepath=site:modules site/profiles/tests/puppet/master.pp
 sed -i "s/environments    => 'directory',//" /home/vagrant/puppet-control/site/profiles/manifests/puppet/master.pp
+sed -i "s/\$confdir/\/etc\/puppet/" /home/vagrant/puppet-control/site/profiles/manifests/puppet/master.pp
 
 sudo cp /home/vagrant/puppet-control/site/profiles/files/hiera.yaml /etc/
-sudo ln -s /etc/hiera.yaml /etc/puppet/hiera.yaml
+sudo cp /home/vagrant/puppet-control/site/profiles/files/hiera.yaml /etc/puppet/
 
 r10k deploy environment -p
 
 service puppetmaster restart
+
 
 sed -i 's/production/development/' /etc/puppet/puppet.conf
