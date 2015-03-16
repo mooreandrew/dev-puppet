@@ -27,11 +27,10 @@ sudo cp /home/vagrant/puppet-control/site/profiles/files/hiera.yaml /etc/puppet/
 
 r10k deploy environment -p
 
-service apache2 restart
-
 sed -i 's/production/development/' /etc/puppet/puppet.conf
 
-
+sudo service puppetmaster restart
+service apache2 restart
 
 echo "Fixing Package Issues"
 sed -i "s/  \$deploy_from_jenkins_rsa,/  \$deploy_from_jenkins_rsa = ''/" /etc/puppet/environments/development/site/profiles/manifests/jenkins.pp

@@ -1,12 +1,23 @@
+require 'yaml'
+
+if (!File.exist?('servers.yaml')) then
+  File.open('servers.yaml', 'w') { |file| file.write("#Variables:\n#  name = Server Name, this should match to the hiera profile\n#  environment = The enviornment the node should use when connecting to puppet - Default is set to development\n#  clone = If r10k needs to be updated (If you need to pick up changes commits to github) - Set to false to speed up deployment.\n#  ip = The ip address of the local machine\n#\n# Duplicate the nodes line to add another sever\n\nservers:\n  - gitlab-app.home.net:\n    environment: development\n    clone: true\n    ip: 172.16.42.51\n  - jenkins-master.home.net:\n    environment: development\n    clone: true\n    ip: 172.16.42.52\n") }
+end
+
+servers = YAML.load_file('servers.yaml')
+
+$nodes = []
+
+servers['servers'].each do |key |
+  array = {}
+  array['name'] = key.first[0]
+  array['environment'] = key[key.first[0]]['environment']
+  array['clone'] = key[key.first[0]]['clone']
+  array['ip'] = key[key.first[0]]['ip']
+  $nodes << array
+end
+
 Vagrant.configure("2") do |config|
-
-  $nodes = []
-
-  if (!File.exist?('servers.rb')) then
-    File.open('servers.rb', 'w') { |file| file.write("#Variables:\n#  name = Server Name, this should match to the hiera profile\n#  environment = The enviornment the node should use when connecting to puppet - Default is set to development\n#  clone = If r10k needs to be updated (If you need to pick up changes commits to github) - Set to false to speed up deployment.\n#  ip = The ip address of the local machine\n#\n# Duplicate the nodes line to add another sever\n\n$nodes << {'name' => 'gitlab-app.home.net', 'environment' => 'development', 'clone' => 'true', 'ip' => '172.16.42.51'}") }
-  end
-
-  require_relative './servers.rb'
 
   #### Loading Puppet Master (Ubuntu)
   config.vm.define "puppet-master.home.net" do |v|
@@ -32,7 +43,7 @@ Vagrant.configure("2") do |config|
       v.vm.network "private_network", :ip => $nodes[i]['ip']
       v.vm.synced_folder ".yum", "/var/cache/yum"
       v.vm.host_name = $nodes[i]['name']
-  	  v.vm.provision :shell, :path => 'provision-agent.sh', :args => $nodes[i]['environment'] + " " + $nodes[i]['clone']
+  	  v.vm.provision :shell, :path => 'provision-agent.sh', :args => $nodes[i]['environment'] + " " + $nodes[i]['clone'].to_s
 
   	  v.vm.provider :virtualbox do |vb|
   		  vb.customize ['modifyvm', :id, '--memory', ENV['VM_MEMORY'] || 2048]
