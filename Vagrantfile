@@ -1,7 +1,7 @@
 require 'yaml'
 
 if (!File.exist?('servers.yaml')) then
-  File.open('servers.yaml', 'w') { |file| file.write("#Variables:\n#  name = Server Name, this should match to the hiera profile\n#  environment = The enviornment the node should use when connecting to puppet - Default is set to development\n#  clone = If r10k needs to be updated (If you need to pick up changes commits to github) - Set to false to speed up deployment.\n#  ip = The ip address of the local machine\n#\n# Duplicate the nodes line to add another sever\n\nservers:\n  - gitlab-app.home.net:\n    environment: development\n    clone: true\n    ip: 172.16.42.51\n  - jenkins-master.home.net:\n    environment: development\n    clone: true\n    ip: 172.16.42.52\n") }
+  File.open('servers.yaml', 'w') { |file| file.write("#Variables:\n#  name = Server Name, this should match to the hiera profile\n#  environment = The enviornment the node should use when connecting to puppet - Default is set to development\n#  clone = If r10k needs to be updated (If you need to pick up changes commits to github) - Set to false to speed up deployment.\n#  ip = The ip address of the local machine\n#\n# Duplicate the nodes line to add another sever\n\nservers:\n  - gitlab-app.home.net:\n      environment: development\n      clone: true\n      ip: 172.16.42.51\n  - jenkins-master.home.net:\n      environment: development\n      clone: true\n      ip: 172.16.42.52\n") }
 end
 
 servers = YAML.load_file('servers.yaml')
