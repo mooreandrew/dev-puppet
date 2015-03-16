@@ -1,5 +1,5 @@
-echo 172.16.42.50 puppet-master.home.net >> /etc/hosts
-echo 172.16.42.50 puppet >> /etc/hosts
+echo 172.16.42.50 puppet-master.home.net puppet >> /etc/hosts
+
 
 wget https://apt.puppetlabs.com/puppetlabs-release-trusty.deb
 sudo dpkg -i puppetlabs-release-trusty.deb
@@ -27,8 +27,7 @@ sudo cp /home/vagrant/puppet-control/site/profiles/files/hiera.yaml /etc/puppet/
 
 r10k deploy environment -p
 
-service puppetmaster restart
-
+service apache2 restart
 
 sed -i 's/production/development/' /etc/puppet/puppet.conf
 
