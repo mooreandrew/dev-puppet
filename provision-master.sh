@@ -29,6 +29,8 @@ r10k deploy environment -p
 
 sed -i 's/production/development/' /etc/puppet/puppet.conf
 
+sleep 120
+
 sudo service puppetmaster restart
 service apache2 restart
 

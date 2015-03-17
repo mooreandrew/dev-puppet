@@ -27,6 +27,8 @@ Vagrant.configure("2") do |config|
     v.vm.network "private_network", :ip => "172.16.42.50"
 	  v.vm.provision :shell, :path => 'provision-master.sh'
     v.vm.synced_folder ".aptget", "/var/cache/apt/archives/"
+    v.vm.synced_folder ".home", "/home/vagrant/"
+
     v.vm.synced_folder ".environments", "/etc/puppet/environments"
 
 	  v.vm.provider :virtualbox do |vb|
