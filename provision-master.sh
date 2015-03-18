@@ -14,7 +14,7 @@ git clone https://github.com/LandRegistry-Ops/puppet-control.git
 cd puppet-control
 git pull
 
-gem install librarian-puppet
+gem install librarian-puppet --no-ri --no-rdoc
 ln -s /usr/local/bin/librarian-puppet /usr/bin/librarian-puppet
 
 librarian-puppet install

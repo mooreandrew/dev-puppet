@@ -11,7 +11,7 @@ sudo yum -y install sshpass
 sudo sed -i 's/\[agent\]/\[agent\]\nserver = puppet-master.home.net/' /etc/puppet/puppet.conf
 sudo sed -i "s/\[agent\]/\[agent\]\nenvironment = $environment/" /etc/puppet/puppet.conf
 
-sshpass -p vagrant ssh -t vagrant@puppet-master.home.net -o StrictHostKeyChecking=no "sudo puppet plugin download --environment $environment; sudo service apache2 restart; exit 0"
+sshpass -p vagrant ssh -t vagrant@puppet-master.home.net -o StrictHostKeyChecking=no "sudo puppet plugin download --environment $environment; sudo service puppetmaster restart; exit 0"
 
 sshpass -p vagrant ssh -t vagrant@puppet-master.home.net -o StrictHostKeyChecking=no "sudo puppet cert clean $HOSTNAME; exit 0"
 
