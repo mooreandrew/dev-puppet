@@ -22,3 +22,6 @@ if [ $r10k = "true" ]; then
 fi
 
 puppet agent --test
+
+#An exit code of '2' means there were changes, an exit code of '4' means there were failures during the transaction, and an exit code of '6' means there were both changes and failures.
+echo "Exit Code: $?"
